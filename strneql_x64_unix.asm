@@ -18,11 +18,8 @@ global strneql_x64_win
 ; RETURN VALUES:
 ; rax: 1 or 0
 
-strneql_x64_win:
-    push R12            ; callee saved
-    push RBX            ; callee saved
 
-strneql_x64_win:
+strneql_x64_unix:
     PUSH R12 ; callee saved
     PUSH RBX ; callee saved
     mov STR1, RDI
