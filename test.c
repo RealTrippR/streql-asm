@@ -6,26 +6,29 @@
 #define ASCII_COLOR_RED "\x1b[31m"
 #define ASCII_COLOR_RESET "\x1b[0m"
 
-void prstreql(const char* str1, const char* str2)
+int prstreql(const char* str1, const char* str2)
 {
-	if (streql(str1, str2)) {
-		printf("%s & %s are equal.\n", str1, str2);
+	int r = streql_x64_win(str1, str2);
+	if (r) {
+		printf("'%s' & '%s' are equal.\n", str1, str2);
 	}
 	else {
-		printf(ASCII_COLOR_RED"%s & %s are not equal.\n"ASCII_COLOR_RESET, str1, str2);
+		printf("'%s' & '%s' "ASCII_COLOR_RED" are not equal."ASCII_COLOR_RESET"\n", str1, str2);
 	}
+	return r;
 }
 
 
-void prstrneql(const char* str1, const char* str2, size_t n)
+int prstrneql(const char* str1, const char* str2, size_t n)
 {
 	int r = strneql_x64_win(str1, str2, n);
 	if (r) {
-		printf("%s & %s are equal up to %zu characters.\n", str1, str2, n);
+		printf("'%s' & '%s' are equal up to %zu characters.\n", str1, str2, n);
 	}
 	else {
-		printf(ASCII_COLOR_RED"%s & %s are not equal up to %zu characters.\n"ASCII_COLOR_RESET, str1, str2, n);
+		printf("'%s' & '%s'" ASCII_COLOR_RED" are not equal "ASCII_COLOR_RESET"up to % zu characters.\n", str1, str2, n);
 	}
+	return r;
 }
 
 int main() {
@@ -34,8 +37,8 @@ int main() {
 	setlocale(LC_ALL, "");
 	{
 		const char* str1 = "mystr\0bb";
-		const char* str2 = "myst1r\0aa";
-		prstreql(str1, str2);
+		const char* str2 = "mystr\0aa";
+		int i =prstreql(str1, str2);
 		prstrneql(str1, str2,7);
 	}
 	{
@@ -47,7 +50,15 @@ int main() {
 
 	{
 		const char* str1 = "questa frase è lunga 35 caratteri";
+		int i = prstreql(str1, str1);
+		int a = 0;
+	}
+	{
+		const char* str1 = "questa frase è lunga 35 caratteri";
 		const char* str2 = "questa frase è lunga 35 caratteri... no, veramente, è 59";
 		prstreql(str1, str2);
+
+		prstrneql(str1, str2, 35);
+
 	}
 }

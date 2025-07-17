@@ -17,12 +17,13 @@ global strneql_x64_win
 strneql_x64_win:
     ;first str in: rcx
     ;second str in: rdx
-    xor rax, rax    ; clear rax
-    xor rbx, rbx    ; clear rbx
-    xor r13, r13    ; clear r13
-    mov r10, rcx ;move str1 to r10
-    mov r11, rdx ;move str2 to r11
-    xor rcx, rcx ;clear rx
+    mov r10, rcx ; move str1 to r10
+    mov r11, rdx ; move str2 to r11
+    xor rcx, rcx ; clear rx
+    xor rax, rax ; clear rax
+    xor rbx, rbx ; clear rbx
+    xor r13, r13 ; clear r13
+
 .loop:
 ; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
     mov REMAINING, N
@@ -43,13 +44,14 @@ strneql_x64_win:
     MOV r12, rcx ; store null terminator index in r12
 
     PCMPESTRI   xmm1, [STR2 + rbx], 0x18 ;https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=PCMPGTB&ig_expand=305,4903
-    ; rcx now holds the index of first difference
-   
+    ; ecx now holds the index of first difference
+
     setc al      ; AL = 1 if CF=1, else 0
 
     ; check if r12 (null-index) is less than rcx(first-diff-index), if so jump to diff
     CMP rcx, r12
     JL .diff
+    JE .eql
 
     cmp al, 0
     jne      .diff
@@ -59,7 +61,14 @@ strneql_x64_win:
     JMP     .loop
 
 .eql:
-    inc        r13
+    mov rax, 1    
+    ; prevent out of bounds
+    cmp ecx, 16
+    jl .ret
+
+    ret;
 .diff:
-    mov rax, r13
+    mov rax, 0
+    ret
+.ret:
     ret ; ret value is rax
