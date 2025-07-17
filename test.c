@@ -32,7 +32,8 @@ int prstrneql(const char* str1, const char* str2, size_t n)
 }
 
 int main() {
-
+	// https://www.ired.team/miscellaneous-reversing-forensics/windows-kernel-internals/linux-x64-calling-convention-stack-frame
+	// https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170/
 	// for UTF-8
 	setlocale(LC_ALL, "");
 	{
@@ -50,14 +51,16 @@ int main() {
 
 	{
 		const char* str1 = "questa frase è lunga 35 caratteri";
-		int i = prstreql(str1, str1);
-		int a = 0;
+		prstreql(str1, str1);
+	}
+	{
+		const char* str1 = "questa frase è lunga 36 caratteri.";
+		prstreql(str1, str1);
 	}
 	{
 		const char* str1 = "questa frase è lunga 35 caratteri";
 		const char* str2 = "questa frase è lunga 35 caratteri... no, veramente, è 59";
 		prstreql(str1, str2);
-
 		prstrneql(str1, str2, 35);
 
 	}
