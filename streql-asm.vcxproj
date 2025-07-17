@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="streql_x64_win.asm" />
-    <None Include="OLD_strneql_x64_win.asm" />
     <None Include="strneql_x64_win.asm" />
   </ItemGroup>
   <ItemGroup>

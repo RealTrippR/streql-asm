@@ -18,9 +18,6 @@
     <None Include="streql_x64_win.asm">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="OLD_strneql_x64_win.asm">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="strneql_x64_win.asm">
       <Filter>Source Files</Filter>
     </None>

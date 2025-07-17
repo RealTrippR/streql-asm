@@ -55,7 +55,6 @@ strneql_x64_win:
     jne      .diff
     je      .eql
 
-
     ADD     rbx, 16
     JMP     .loop
 
