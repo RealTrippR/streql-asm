@@ -58,10 +58,15 @@ int main() {
 		prstreql(str1, str1);
 	}
 	{
-		const char* str1 = "questa frase è lunga 35 caratteri";
-		const char* str2 = "questa frase è lunga 35 caratteri... no, veramente, è 59";
+		const char* str1 = "questa frase è lunga 34 caratteri";
+		const char* str2 = "questa frase è lunga 34 caratteri... no, veramente, è 59";
 		prstreql(str1, str2);
-		prstrneql(str1, str2, 35);
-
+		prstrneql(str1, str2, 34);
+	}
+	{
+		const char* str1 = "this sentence is 35 characters long. 4978947469358952779257587333553258676943874638436946746374368746878735769830360286408644802360803926";
+		const char* str2 = "this sentence is 35 characters long. 32589676439834698864469368986739379367";
+		prstreql(str1, str2);
+		prstrneql(str1, str2, 36);
 	}
 }
