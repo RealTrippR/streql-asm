@@ -17,14 +17,16 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 
 #if defined(_MSC_VER)
-#if defined(_M_X64) || (_M_IX86_FP >= 2)
-#define TRIPP_STREQL_USE_SIMD
+#if defined(_M_X64)
+#define STREQL_SIMD_SUPPORTED 1
+#else
+#define STREQL_SIMD_SUPPORTED 0
 #endif
 #else
 #if defined(__SSE4_2__)
-#define TRIPP_STREQL_USE_SIMD
+#define STREQL_SIMD_SUPPORTED 1
 #else
-#define TRIPP_STREQL_SIMD_NOT_SUPPORTED
+#define STREQL_SIMD_SUPPORTED 0
 #endif
 #endif
 
@@ -33,7 +35,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 #elif
 #define STREQL_SUPPORTED_ARCHITECHURE 0
 #endif
-#if (defined(_WIN32) || defined(_WIN64)) || (defined(__x86_64__)) && (STREQL_SUPPORTED_ARCHITECHURE==1)
+#if (defined(_WIN32) || defined(_WIN64)) || (defined(__x86_64__)) && (STREQL_SUPPORTED_ARCHITECHURE) && (STREQL_SIMD_SUPPORTED)
 
  int streql_x64_win(const char*, const char*);
 
@@ -44,7 +46,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 #define strneql(str1,str2,n) strneql_x64_win(str1,str2,n)
 
 // https://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive
-#elif (defined(__linux__) || defined(__unix) || defined(__APPLE__)) && (STREQL_SUPPORTED_ARCHITECHURE==1)
+#elif (defined(__linux__) || defined(__unix) || defined(__APPLE__)) && (STREQL_SUPPORTED_ARCHITECHURE) && (STREQL_SIMD_SUPPORTED)
 
 int streql_x64_unix(const char*, const char*);
 
