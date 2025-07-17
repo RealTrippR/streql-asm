@@ -1,4 +1,3 @@
-;https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2b-manual.pdf
 default rel
 section .text
 
@@ -9,75 +8,72 @@ global strneql_x64_win
 %define STR1 RDI
 %define STR2 RSI
 
-
 ; INPUTS:
-; first string in RCX
-; second string in RDX
+; first string in RDI
+; second string in RSI
 ; N in R8
 
 ; RETURN VALUES:
 ; rax: 1 or 0
 
 strneql_x64_win:
-    ;mov STR1, RDI ; move str1 to r10
-    ;mov STR2, RSI ; move str2 to r11
-    xor RCX, RCX ; clear rcx
-    xor RBX, RBX ; clear RBX
+    push R12            ; callee saved
+    push RBX            ; callee saved
 
-    PUSH R12 ; callee saved
+    xor RCX, RCX        ; clear rcx (used by PCMPESTRI)
+    xor RBX, RBX        ; offset into strings
+
 .loop:
-; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
     mov REMAINING, N
-    sub REMAINING, RBX ; rbx is current offset from strings
+    sub REMAINING, RBX   ; calculate remaining bytes to compare
 
-    ; -- clamp remainder to 16 --
-    MOV RDX, 16 ;CMOVcc only be used between registers, thus constant must be moved
-    CMP REMAINING, 16
-    CMOVA REMAINING, RDX     ;compare move above (move if greater)
-    
-    ; set explicit length
-    MOV EAX, REMAINING%+d  ; lower half of REMAINING
-    MOV EDX, REMAINING%+d  ; lower half of REMAINING
-   
-    MOVDQU     XMM1, [STR1 + RBX]
-    ; pcmpistri will store the index of the null terminator in rcx
-    PCMPESTRI   XMM1, [STR2 + RBX], 0x58 ;https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=PCMPGTB&ig_expand=305,4903
-    MOV R12, RCX ; store null terminator index in
+    ; clamp REMAINING to max 16
+    mov RDX, 16
+    cmp REMAINING, RDX
+    cmova REMAINING, RDX
 
+    ; increment lengths to catch null terminator (max 16)
+    mov eax, r9d        ; REMAINING low 32 bits
+    mov edx, r9d
+    inc eax
+    inc edx
+    cmp eax, 17
+    cmovae eax, 16
+    cmp edx, 17
+    cmovae edx, 16
 
-    ; ecx will be 16 is there is no difference, and the carry flag will be 0 is there's no difference
-    ; Zero Flag (ZF) will be set if all chars matched and a null terminator was found
-    ; Carry Flag set if a mismatch was found before null terminator
-    PCMPESTRI   XMM1, [STR2 + RBX], 0x18 ;https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=PCMPGTB&ig_expand=305,4903
-    ; ECX now holds the index of first difference
+    movdqu xmm1, [STR1 + RBX]
 
-    SETC al      ; AL = 1 if CF=1, else 0
+    ; Find null terminator in STR2 + RBX
+    pcmpeistri xmm1, [STR2 + RBX], 0x58
+    mov R12, RCX        ; null terminator index
 
-    ; check if null-index is less than first-diff-index, if so jump to diff
-    CMP R12, RCX
-    JL .diff
-    JE .eql
+    ; Find first difference index between strings
+    pcmpeistri xmm1, [STR2 + RBX], 0x18
+    ; ECX = first difference index
 
-    ; check carry flag
-    CMP AL, 0
-    JNE      .diff
-    JE      .eql
+    setc al             ; AL=1 if CF=1 (mismatch before null)
 
-    ADD     RBX, 16
-    JMP     .loop
+    ; check if null terminator index < first difference index
+    cmp RCX, R12
+    jl .diff
+    je .eql
+
+    cmp al, 0
+    jne .diff
+    je .eql
+
+    add RBX, 16
+    jmp .loop
 
 .eql:
-    MOV RAX, 1    
-    ; prevent out of bounds
-    CMP ECX, 16
-    JL .ret
-
-    POP R12 ; callee saved
-    RET;
-.diff:
-    MOV RAX, 0
-    POP R12 ; callee saved
+    mov RAX, 1
+    pop RBX
+    pop R12
     ret
-.ret:
-    POP R12 ; callee saved
-    ret ; ret value is rax
+
+.diff:
+    mov RAX, 0
+    pop RBX
+    pop R12
+    ret
