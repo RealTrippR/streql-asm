@@ -21,6 +21,12 @@
     <None Include="strneql_x64_win.asm">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="streql_x64_unix.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="strneql_x64_unix.asm">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="streqlasm.h">

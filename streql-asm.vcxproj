@@ -129,7 +129,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="streql_x64_unix.asm" />
     <None Include="streql_x64_win.asm" />
+    <None Include="strneql_x64_unix.asm" />
     <None Include="strneql_x64_win.asm" />
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 
 int prstreql(const char* str1, const char* str2)
 {
-	int r = streql_x64_win(str1, str2);
+	int r = streql(str1, str2);
 	if (r) {
 		printf("'%s' & '%s' are equal.\n", str1, str2);
 	}
@@ -21,7 +21,7 @@ int prstreql(const char* str1, const char* str2)
 
 int prstrneql(const char* str1, const char* str2, size_t n)
 {
-	int r = strneql_x64_win(str1, str2, n);
+	int r = strneql(str1, str2, n);
 	if (r) {
 		printf("'%s' & '%s' are equal up to %zu characters.\n", str1, str2, n);
 	}
@@ -39,7 +39,7 @@ int main() {
 	{
 		const char* str1 = "mystr\0bb";
 		const char* str2 = "mystr\0aa";
-		int i =prstreql(str1, str2);
+		prstreql(str1, str2);
 		prstrneql(str1, str2,7);
 	}
 	{
