@@ -6,10 +6,19 @@ global streql_x64_win
 %define STR1 RDI
 %define STR2 RSI
 
+; INPUTS:
+; first string in RDI
+; second string in RSI
+
+; RETURN VALUES:
+; rax: 1 or 0
+
+; MODIFIES:
+; rbx, rax, ecx
+
 streql_x64_unix:
     ;first str in: RDI
     ;second str in: RSI
-    xor rax, rax ; set rax to 0
     xor rbx, rbx ; set rbx to 0
 
 .loop:

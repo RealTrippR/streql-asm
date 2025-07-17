@@ -61,7 +61,7 @@ int strneql_x64_unix(const char*, const char*, size_t);
 
 #else
 // C fallback
-int streql(const char* str1, const char* str2) {
+static int streql(const char* str1, const char* str2) {
     while (1) {
         if (*str1 != *str2) {
             return 0;
@@ -74,7 +74,7 @@ int streql(const char* str1, const char* str2) {
     }
     return 1;
 }
-int strneql(const char* str1, const char* str2, unsigned int n) {
+static int strneql(const char* str1, const char* str2, unsigned int n) {
     size_t i = 0;
     while (i < n) {
         if (str1[i] != str2[i]) {

@@ -10,12 +10,24 @@ global strneql_x64_win
 %define STR1 r10
 %define STR2 r11
 
+
+; INPUTS:
+; first string in RCX
+; second string in RDX
+; N in R8
+
+; RETURN VALUES:
+; rax: 1 or 0
+
+; MODIFIES:
+; rbx, rax, ecx, R8, R9, R10, R11, R12
+
 strneql_x64_win:
     ;first str in: rcx
     ;second str in: rdx
     mov r10, rcx ; move str1 to r10
     mov r11, rdx ; move str2 to r11
-    xor rcx, rcx ; clear rx
+    xor rcx, rcx ; clear rcx
     xor rax, rax ; clear rax
     xor rbx, rbx ; clear rbx
 

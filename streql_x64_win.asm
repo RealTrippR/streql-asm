@@ -6,13 +6,20 @@ global streql_x64_win
 %define STR1 r10
 %define STR2 r11
 
+; INPUTS:
+; first string in RCX
+; second string in RDX
+
+; RETURN VALUES:
+; rax: 1 or 0
+
+; MODIFIES:
+; rbx, rax, ecx
+
 streql_x64_win:
-    ;first str in: rcx
-    ;second str in: rdx
     mov r10, rcx ; move str1 to r10
     mov r11, rdx ; move str2 to r11
     
-    xor rax, rax ; set rax to 0
     xor rbx, rbx ; set rbx to 0
 
 .loop:
