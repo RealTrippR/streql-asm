@@ -1,3 +1,4 @@
+;https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2b-manual.pdf
 default rel
 section .text
 
@@ -7,6 +8,7 @@ global strneql_x64_win
 %define REMAINING r9
 %define STR1 RDI
 %define STR2 RSI
+%define STR_OFFSET RBX
 
 ; INPUTS:
 ; first string in RDI
@@ -20,60 +22,74 @@ strneql_x64_win:
     push R12            ; callee saved
     push RBX            ; callee saved
 
-    xor RCX, RCX        ; clear rcx (used by PCMPESTRI)
-    xor RBX, RBX        ; offset into strings
-
+strneql_x64_win:
+    PUSH R12 ; callee saved
+    PUSH RBX ; callee saved
+    mov STR1, RDI
+    mov STR2, RSI
+    xor RCX, RCX ; clear rcx
+    xor STR_OFFSET, STR_OFFSET ; clear RBX
+    pxor xmm3, xmm3 ;clear xmm3
 .loop:
+; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
     mov REMAINING, N
-    sub REMAINING, RBX   ; calculate remaining bytes to compare
+    sub REMAINING, STR_OFFSET
 
-    ; clamp REMAINING to max 16
-    mov RDX, 16
-    cmp REMAINING, RDX
-    cmova REMAINING, RDX
+    ; -- clamp remainder to 16 --
+    MOV RDX, 16 ;CMOVcc only be used between registers, thus constant must be moved
+    CMP REMAINING, 16
+    CMOVA REMAINING, RDX     ;compare move above (move if greater)
+    
 
-    ; increment lengths to catch null terminator (max 16)
-    mov eax, r9d        ; REMAINING low 32 bits
-    mov edx, r9d
-    inc eax
-    inc edx
-    cmp eax, 17
-    cmovae eax, 16
-    cmp edx, 17
-    cmovae edx, 16
+    MOVDQU     XMM0, [STR1 + STR_OFFSET]
+    MOVDQU     XMM1, [STR2 + STR_OFFSET]
 
-    movdqu xmm1, [STR1 + RBX]
+    ; find null terminator
+    pcmpistri XMM0, XMM3, 0x0A
+    mov RDX, RCX
+    pcmpistri XMM1, XMM3, 0x0A
+    mov R12, RCX
 
-    ; Find null terminator in STR2 + RBX
-    pcmpeistri xmm1, [STR2 + RBX], 0x58
-    mov R12, RCX        ; null terminator index
+    CMP     RDX, R12
+    JE      .skip_jump        ; If RDX == R12, skip the null terminator index checks
+    
+    ; check if null terminator 1 is less than remaining
+    CMP     RDX, REMAINING
+    JB      .diff_ret         ; Unsigned jump if below
 
-    ; Find first difference index between strings
-    pcmpeistri xmm1, [STR2 + RBX], 0x18
-    ; ECX = first difference index
+    ; check if null terminator 2 is less than remaining
+    CMP     R12, REMAINING
+    JB      .diff_ret         ; Unsigned jump if below
 
-    setc al             ; AL=1 if CF=1 (mismatch before null)
 
-    ; check if null terminator index < first difference index
-    cmp RCX, R12
-    jl .diff
-    je .eql
+.skip_jump:
 
-    cmp al, 0
-    jne .diff
-    je .eql
+    CMP REMAINING, RDX ; clamp remaining to null terminator index 1
+    CMOVA REMAINING, RDX
+    CMP REMAINING, R12 ; clamp remaining to null terminator index 2
+    CMOVA REMAINING, R12
 
-    add RBX, 16
-    jmp .loop
+    MOV RAX, REMAINING
+    MOV RDX, REMAINING
+    ; ecx will be 16 is there is no difference, and the carry flag will be 0 is there's no difference
+    ; Zero Flag (ZF) will be set if all chars matched and a null terminator was found
+    ; Carry Flag set if a mismatch was found before null terminator
+    PCMPESTRI  XMM0, XMM1, 0x18 ;https://john-lazzaro.github.io/class/special/pdf/string_opcodes.pdf
+    ; ECX now holds the index of first difference
 
-.eql:
-    mov RAX, 1
-    pop RBX
-    pop R12
-    ret
+    JC      .diff_ret
+    JZ      .eql_ret
 
-.diff:
-    mov RAX, 0
-    pop RBX
-    pop R12
-    ret
+    ADD     STR_OFFSET, 16
+    JMP     .loop
+
+.eql_ret:
+    POP RBX
+    POP R12
+    MOV RAX, 1
+    RET
+.diff_ret:
+    POP RBX
+    POP R12
+    MOV RAX, 0
+    RET
