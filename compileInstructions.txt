@@ -1,0 +1,2 @@
+nasm -f win64 streql_x64_win.asm -o streql_x64_win.obj
+nasm -f win64 strneql_x64_win.asm -o strneql_x64_win.obj
