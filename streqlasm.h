@@ -15,6 +15,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef TRIPP_STREQL_ASM_H
+#define TRIPP_STREQL_ASM_H
+
 
 #if defined(_MSC_VER)
 #if defined(_M_X64)
@@ -55,7 +58,9 @@ int strneql_x64_unix(const char*, const char*, size_t);
 #define streql(str1,str2) streql_x64_unix(str1,str2)
 
 #define strneql(str1,str2,n) strneql_x64_unix(str1,str2,n)
+
 #else
+// C fallback
 int streql(const char* str1, const char* str2) {
     while (1) {
         if (*str1 != *str2) {
@@ -82,4 +87,7 @@ int strneql(const char* str1, const char* str2, unsigned int n) {
     }
     return 1;
 }
-#endif // !_WIN32
+#endif
+
+
+#endif // !TRIPP_STREQL_ASM_H
