@@ -48,7 +48,7 @@ int strneql_x64_win(const char*, const char*, size_t);
 
 #define strneql(str1,str2,n) strneql_x64_win(str1,str2,n)
 
-// https://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive
+/* https://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive */
 #elif (defined(__linux__) || defined(__unix) || defined(__APPLE__)) && (STREQL_SUPPORTED_ARCHITECHURE) && (STREQL_SIMD_SUPPORTED)
 
 int streql_x64_unix(const char*, const char*);
@@ -60,7 +60,7 @@ int strneql_x64_unix(const char*, const char*, size_t);
 #define strneql(str1,str2,n) strneql_x64_unix(str1,str2,n)
 
 #else
-// C fallback
+/* C fallback */
 static int streql(const char* str1, const char* str2) {
     while (1) {
         if (*str1 != *str2) {
@@ -90,4 +90,4 @@ static int strneql(const char* str1, const char* str2, unsigned int n) {
 #endif
 
 
-#endif // !TRIPP_STREQL_ASM_H
+#endif /* !TRIPP_STREQL_ASM_H */

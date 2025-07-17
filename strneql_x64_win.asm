@@ -27,7 +27,7 @@ strneql_x64_win:
     xor STR_OFFSET, STR_OFFSET ; clear RBX
     pxor xmm3, xmm3 ;clear xmm3
 .loop:
-; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
+; https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
     mov REMAINING, N
     sub REMAINING, STR_OFFSET
 
