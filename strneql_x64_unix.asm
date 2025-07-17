@@ -15,10 +15,9 @@ strneql_x64_unix:
     ;second str in: rdx
     mov r10, RDI ; move str1 to r10
     mov r11, RSI ; move str2 to r11
-    xor rcx, rcx ; clear rx
+    xor rcx, rcx ; clear rcx
     xor rax, rax ; clear rax
     xor rbx, rbx ; clear rbx
-    xor r13, r13 ; clear r13
 
 .loop:
 ; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr

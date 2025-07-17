@@ -18,7 +18,6 @@ strneql_x64_win:
     xor rcx, rcx ; clear rx
     xor rax, rax ; clear rax
     xor rbx, rbx ; clear rbx
-    xor r13, r13 ; clear r13
 
 .loop:
 ; // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
