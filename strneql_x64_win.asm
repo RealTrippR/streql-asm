@@ -47,7 +47,7 @@ strneql_x64_win:
    
     setc al      ; AL = 1 if CF=1, else 0
 
-    ; check if r12 (null-index) is less than rcx(first-diff-index), jump to diff
+    ; check if r12 (null-index) is less than rcx(first-diff-index), if so jump to diff
     CMP rcx, r12
     JL .diff
 
@@ -63,26 +63,3 @@ strneql_x64_win:
 .diff:
     mov rax, r13
     ret ; ret value is rax
-
-
-;PSHUFB — Packed Shuffle Bytes
-;first MM register: destination operand
-;second MM registrer: shuffle control register
-;
-; PSHUFB works by iterating over the two given MM registers.
-; if the 7th-level bit at byte at index i (where i ranges from 0..16) is set
-; in the shuffle control mask, the byte at index i in the destination register will be
-; zeroed, otherwise the byte in the control mask is used to index into the
-; destination register: dst[i] = dst[mask[i] & 0x0F] 
-; in other words:
-; For i in 0..15:
-; If (xmm2[i] & 0x80) != 0:
-;     xmm1[i] := 0x00
-; Else:
-;     xmm1[i] := xmm1[xmm2[i] & 0x0F]
-;
-; Example:
-; xmm1 contains:  A0 A1 A2 A3 A4 A5 A6 A7  A8 A9 AA AB AC AD AE AF
-; xmm2 contains:  00 01 02 03  FF FF FF FF  0C 0D 0E 0F  80 80 80 80
-;
-; xmm1 (result):  A0 A1 A2 A3  00 00 00 00  AC AD AE AF  00 00 00 00
