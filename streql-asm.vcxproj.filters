@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="compileInstructions.txt" />
+    <Text Include="callingConventionCheatSheet.txt" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="streql_x64_win.obj" />

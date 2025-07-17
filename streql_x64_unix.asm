@@ -19,12 +19,12 @@ global streql_x64_win
 streql_x64_unix:
     ;first str in: RDI
     ;second str in: RSI
-    xor rbx, rbx ; set rbx to 0
+    xor rax, rax ; set rbx to 0
 
 .loop:
 ;         // https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#ig_expand=4842,1047&text=cmpistr
-    MOVDQU     xmm1, [STR1 + rbx]
-    PCMPISTRI  xmm1, [STR2 + rbx], 0x18    ; EQUAL_EACH | NEGATIVE_POLARITY
+    MOVDQU     xmm1, [STR1 + rax]
+    PCMPISTRI  xmm1, [STR2 + rax], 0x18    ; EQUAL_EACH | NEGATIVE_POLARITY
     ; ecx will be 16 is there is no difference, and the carry flag will be 0 is there's no difference
     ; Zero Flag (ZF) will be set if all chars matched and a null terminator was found
     ; Carry Flag set if a mismatch was found before null terminator
@@ -32,7 +32,7 @@ streql_x64_unix:
     JC      .diff_ret
     JZ      .eql_ret
 
-    ADD     rbx, 16
+    ADD     rax, 16
     JMP     .loop
 
 .eql_ret:

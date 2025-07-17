@@ -1,0 +1,76 @@
+Calling Convention Cheat Sheet
+---------------------------------------------------------------------------------
+Windows x64 Calling Convention:
+
+Chars, Ints, Shorts, Longs, etc.. (8,16,32,64, and 128 bit values):
+Param #1..	RCX
+Param #2..	RDX
+Param #3..	R8
+Param #4..	R9
+Param #>5..	STACK
+
+Floating Point Values:
+Param #1..	XMM0
+Param #2..	XMM1
+Param #3..	XMM2
+Param #4..	XMM3
+Param #>5..	STACK
+
+Windows x64 Return Convention:
+Chars, Ints, Shorts, Longs, etc.. (8,16,32,64, and 128 bit values):
+Return.. RAX
+
+Floating Point Values:
+Return.. XMM0
+
+Windows x64 Callee Saved Values:
+RBX
+RSP
+RBP
+R12
+R13
+R14
+R15
+XMM6–XMM15
+
+
+
+---------------------------------------------------------------------------------
+Linux x64 Calling Convention:
+Param #1..	RDI
+Param #2..	RSI
+Param #3..	RDX
+Param #4..	RCX
+Param #5..	R8
+Param #6..	R9
+Param #>7..	STACK
+
+
+Floating Point Values:
+Param #1..	XMM0
+Param #2..	XMM1
+Param #3..	XMM2
+Param #4..	XMM3
+Param #5..	XMM4
+Param #6..	XMM5
+Param #7..	XMM6
+Param #8..	XMM7
+Param #>9..	STACK
+
+Linux x64 Return Convention:
+Chars, Ints, Shorts, Longs, etc.. (8,16,32,64, and 128 bit values):
+Return.. RAX
+
+Floating Point Values:
+Return.. XMM0
+
+Linux x64 Callee Saved Values:
+RBX
+RSP
+RBP
+RDI
+RSI
+R12
+R13
+R14
+R15

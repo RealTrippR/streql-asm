@@ -141,6 +141,7 @@
     <ClCompile Include="test.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="callingConventionCheatSheet.txt" />
     <Text Include="compileInstructions.txt" />
   </ItemGroup>
   <ItemGroup>

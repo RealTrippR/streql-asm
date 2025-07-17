@@ -36,6 +36,11 @@ int main() {
 	// for UTF-8
 	setlocale(LC_ALL, "");
 	{
+		const char* str1 = "0";
+		const char* str2 = "ascii";
+		prstrneql(str1, str2, 1);
+	}
+	{
 		const char* str1 = "mystr\0bb";
 		const char* str2 = "mystr\0aa";
 		prstreql(str1, str2);

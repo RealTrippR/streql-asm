@@ -40,9 +40,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 #endif
 #if (defined(_WIN32) || defined(_WIN64)) || (defined(__x86_64__)) && (STREQL_SUPPORTED_ARCHITECHURE) && (STREQL_SIMD_SUPPORTED)
 
- int streql_x64_win(const char*, const char*);
+int streql_x64_win(const char*, const char*);
 
- int strneql_x64_win(const char*, const char*, size_t);
+int strneql_x64_win(const char*, const char*, size_t);
 
 #define streql(str1,str2) streql_x64_win(str1,str2)
 
