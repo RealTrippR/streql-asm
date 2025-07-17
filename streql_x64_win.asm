@@ -12,7 +12,6 @@ streql_x64_win:
     mov r10, rcx ; move str1 to r10
     mov r11, rdx ; move str2 to r11
     
-    xor rcx, rcx ; clear rcx
     xor rax, rax ; set rax to 0
     xor rbx, rbx ; set rbx to 0
 

@@ -3,16 +3,12 @@ default rel
 section .text
 global streql_x64_win
 
-%define STR1 r10
-%define STR2 r11
+%define STR1 RDI
+%define STR2 RSI
 
 streql_x64_unix:
-    ;first str in: rcx
-    ;second str in: rdx
-    mov r10, RDI ; move str1 to r10
-    mov r11, RSI ; move str2 to r11
-    
-    xor rcx, rcx ; clear rcx
+    ;first str in: RDI
+    ;second str in: RSI
     xor rax, rax ; set rax to 0
     xor rbx, rbx ; set rbx to 0
 

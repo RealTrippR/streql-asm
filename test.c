@@ -18,7 +18,6 @@ int prstreql(const char* str1, const char* str2)
 	return r;
 }
 
-
 int prstrneql(const char* str1, const char* str2, size_t n)
 {
 	int r = strneql(str1, str2, n);
