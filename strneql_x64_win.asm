@@ -2,10 +2,6 @@
 default rel
 section .text
 
-section .rodata align=16
-idx_table: db 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
-broadcast: db 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0
-
 global strneql_x64_win
 
 
