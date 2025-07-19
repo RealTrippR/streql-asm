@@ -22,8 +22,6 @@ global strneql_x64_win
 strneql_x64_unix:
     PUSH R12 ; callee saved
     PUSH RBX ; callee saved
-    mov STR1, RDI
-    mov STR2, RSI
     xor RCX, RCX ; clear rcx
     xor STR_OFFSET, STR_OFFSET ; clear RBX
     pxor xmm3, xmm3 ;clear xmm3
