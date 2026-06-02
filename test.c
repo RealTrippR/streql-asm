@@ -35,7 +35,7 @@ int prstrneql(const char* str1, const char* str2, uint64_t n)
 		printf("'%s' & '%s' are equal up to %zu characters.\n", str1, str2, n);
 	}
 	else {
-		printf("'%s' & '%s'" ASCII_COLOR_RED" are not equal "ASCII_COLOR_RESET"up to % zu characters.\n", str1, str2, n);
+		printf("'%s' & '%s'" ASCII_COLOR_RED" are not equal "ASCII_COLOR_RESET"up to %zu characters.\n", str1, str2, n);
 	}
 	if (r != r2) {
 		assert(00 && "BAD");
@@ -44,6 +44,15 @@ int prstrneql(const char* str1, const char* str2, uint64_t n)
 }
 
 int main() {
+    #if (STREQL_SIMD_SUPPORTED==1)
+        printf("-- SIMD E4.2 is supported --\n");
+    #endif
+    #if (STREQL_SUPPORTED_ARCHITECHURE==1)
+        printf("-- X64 Architecture --\n");
+    #endif
+    
+
+
 	// https://www.ired.team/miscellaneous-reversing-forensics/windows-kernel-internals/linux-x64-calling-convention-stack-frame
 	// https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170/
 	// for UTF-8
